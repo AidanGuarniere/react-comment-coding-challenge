@@ -56,24 +56,28 @@ function App() {
     setComments(newComments);
   };
 
-  function editComment(comments, commentId, text) {
+  function editComment(comments, commentId, text, currentUser) {
     return comments.map((comment) => {
       if (comment.id === commentId) {
-        return {
-          ...comment,
-          text: text,
-        };
+        if (currentUser.id === comment.user.id) {
+          return {
+            ...comment,
+            text: text,
+          };
+        } else {
+          return comment;
+        }
       } else {
         return {
           ...comment,
-          children: editComment(comment.children, commentId, text),
+          children: editComment(comment.children, commentId, text, currentUser),
         };
       }
     });
   }
 
   const handleEditComment = (commentId, text) => {
-    const newComments = editComment(comments, commentId, text);
+    const newComments = editComment(comments, commentId, text, currentUser);
     setComments(newComments);
   };
 

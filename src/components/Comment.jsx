@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import AddCommentForm from "./AddCommentForm";
 import EditCommentForm from "./EditCommentForm";
 
-function Comment({ comment, onReply, onEdit, onDelete }) {
+function Comment({ comment, onReply, onEdit, onDelete, currentUser }) {
   const [editing, setEditing] = useState(false);
   const [replying, setReplying] = useState(false);
+
   const handleEdit = () => {
     setEditing(true);
   };
@@ -28,30 +29,47 @@ function Comment({ comment, onReply, onEdit, onDelete }) {
       <div className="commentBody">
         <h1>{comment.user.name}</h1>
         <p>{comment.text}</p>
-        <button onClick={() => setReplying(true)}>Reply</button>
-        {replying && (
+        {currentUser && (
           <>
-            <AddCommentForm
-              onSubmit={handleReply}
-              onCancel={() => setReplying(false)}
-            />
-            <button onClick={() => setReplying(false)}>Cancel</button>
+            {" "}
+            <button onClick={() => setReplying(true)}>Reply</button>
+            {replying && (
+              <>
+                <AddCommentForm
+                  onSubmit={handleReply}
+                  onCancel={() => setReplying(false)}
+                />
+                <button onClick={() => setReplying(false)}>Cancel</button>
+              </>
+            )}
+            {comment.user.id === currentUser.id && (
+              <button onClick={handleEdit}>Edit</button>
+            )}
+            {editing ? (
+              <EditCommentForm
+                comment={comment}
+                onSubmit={handleSaveEdit}
+                onCancel={handleCancelEdit}
+              />
+            ) : null}
+            {comment.user.id === currentUser.id && (
+              <button onClick={() => onDelete(comment.id)}>Delete</button>
+            )}
           </>
         )}
-        <button onClick={handleEdit}>Edit</button>
-        {editing ? (
-          <EditCommentForm
-            comment={comment}
-            onSubmit={handleSaveEdit}
-            onCancel={handleCancelEdit}
-          />
-        ) : null}
       </div>
-      <button onClick={() => onDelete(comment.id)}>Delete</button>
+
       <div className="commentReplies">
         {" "}
         {comment.children.map((child) => (
-          <Comment key={child.id} comment={child} />
+          <Comment
+            key={child.id}
+            comment={child}
+            onReply={onReply}
+            onEdit={onEdit}
+            onDelete={onDelete}
+            currentUser={currentUser}
+          />
         ))}
       </div>
     </div>
