@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import AddCommentForm from "./AddCommentForm";
 import EditCommentForm from "./EditCommentForm";
 
-function Comment({ comment, onReply, onEdit, onDelete, currentUser }) {
+function Comment({ comment, onReply, onEdit, onDelete, currentUser, showDelete }) {
   const [editing, setEditing] = useState(false);
   const [replying, setReplying] = useState(false);
 
@@ -52,9 +52,9 @@ function Comment({ comment, onReply, onEdit, onDelete, currentUser }) {
                 onCancel={handleCancelEdit}
               />
             ) : null}
-            {comment.user.id === currentUser.id && (
+            {comment.user.id === currentUser.id || showDelete === true ? (
               <button onClick={() => onDelete(comment.id)}>Delete</button>
-            )}
+            ) : null}
           </>
         )}
       </div>
@@ -69,6 +69,7 @@ function Comment({ comment, onReply, onEdit, onDelete, currentUser }) {
             onEdit={onEdit}
             onDelete={onDelete}
             currentUser={currentUser}
+            showDelete={comment.user.id === currentUser.id ? true : false}
           />
         ))}
       </div>

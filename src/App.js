@@ -12,7 +12,7 @@ function App() {
   ];
   const [comments, setComments] = useState(starterComments);
 
-  const [currentUser, setCurrentUser] = useState(users[1]);
+  const [currentUser, setCurrentUser] = useState(users[0]);
 
   const addComment = (comments, text, currentUser) => {
     const newComment = {
@@ -81,21 +81,57 @@ function App() {
     setComments(newComments);
   };
 
-  function deleteComment(comments, commentId) {
+  const handleDeleteComment = (commentId, parentCommentId) => {
+    const newComments = deleteComment(
+      comments,
+      commentId,
+      parentCommentId,
+      currentUser
+    );
+    setComments(newComments);
+  };
+
+  function deleteComment(comments, commentId, parentCommentId, currentUser) {
     return comments.filter((comment) => {
       if (comment.id === commentId) {
-        return false;
+        if (
+          comment.user.id === currentUser.id ||
+          isChildOfComment(parentCommentId, comment, currentUser)
+        ) {
+          return false;
+        } else {
+          return true;
+        }
       } else {
-        comment.children = deleteComment(comment.children, commentId);
-        return true;
+        return {
+          ...comment,
+          children: deleteComment(
+            comment.children,
+            commentId,
+            parentCommentId,
+            currentUser
+          ),
+        };
       }
     });
   }
 
-  const handleDeleteComment = (commentId) => {
-    const newComments = deleteComment(comments, commentId);
-    setComments(newComments);
-  };
+  function isChildOfComment(parentCommentId, comment, currentUser) {
+    if (
+      comment.parentCommentId === parentCommentId &&
+      comment.user.id !== currentUser.id
+    ) {
+      return true;
+    }
+
+    for (let i = 0; i < comment.children.length; i++) {
+      if (isChildOfComment(parentCommentId, comment.children[i], currentUser)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
 
   return (
     <div className="App">
