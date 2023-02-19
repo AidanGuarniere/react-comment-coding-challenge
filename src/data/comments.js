@@ -1,10 +1,10 @@
 const users = [
-  { id: 1, name: "Alice" },
-  { id: 2, name: "Bob" },
-  { id: 3, name: "Charlie" },
+  { id: 1, name: "Joe" },
+  { id: 2, name: "Shmoe" },
+  { id: 3, name: "Broe" },
 ];
 
-const comments = [
+const starterComments = [
   {
     id: 1,
     text: "First comment",
@@ -32,4 +32,4 @@ const comments = [
   },
 ];
 
-export { comments };
+export { starterComments };
