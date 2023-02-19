@@ -12,7 +12,7 @@ function App() {
   ];
   const [comments, setComments] = useState(starterComments);
 
-  const [currentUser, setCurrentUser] = useState(users[0]);
+  const [currentUser, setCurrentUser] = useState(users[1]);
 
   const addComment = (comments, text, currentUser) => {
     const newComment = {
@@ -56,6 +56,43 @@ function App() {
     setComments(newComments);
   };
 
+  function editComment(comments, commentId, text) {
+    return comments.map((comment) => {
+      if (comment.id === commentId) {
+        return {
+          ...comment,
+          text: text,
+        };
+      } else {
+        return {
+          ...comment,
+          children: editComment(comment.children, commentId, text),
+        };
+      }
+    });
+  }
+
+  const handleEditComment = (commentId, text) => {
+    const newComments = editComment(comments, commentId, text);
+    setComments(newComments);
+  };
+
+  function deleteComment(comments, commentId) {
+    return comments.filter((comment) => {
+      if (comment.id === commentId) {
+        return false;
+      } else {
+        comment.children = deleteComment(comment.children, commentId);
+        return true;
+      }
+    });
+  }
+
+  const handleDeleteComment = (commentId) => {
+    const newComments = deleteComment(comments, commentId);
+    setComments(newComments);
+  };
+
   return (
     <div className="App">
       <p>Current User: {currentUser.name}</p>
@@ -63,6 +100,8 @@ function App() {
         comments={comments}
         onAdd={handleAddComment}
         onReply={handleAddReply}
+        onEdit={handleEditComment}
+        onDelete={handleDeleteComment}
         currentUser={currentUser}
       />
     </div>

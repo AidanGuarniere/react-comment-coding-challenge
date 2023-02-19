@@ -2,7 +2,7 @@ import React from "react";
 import Comment from "./Comment";
 import AddCommentForm from "./AddCommentForm";
 
-function CommentThread({ comments, onAdd, onReply }) {
+function CommentThread({ comments, onAdd, onReply, onEdit, onDelete }) {
   const submitComment = (text) => {
     onAdd(text);
   };
@@ -10,7 +10,7 @@ function CommentThread({ comments, onAdd, onReply }) {
   return (
     <div>
       {comments.map((comment) => (
-        <Comment key={comment.id} comment={comment} onReply={onReply} />
+        <Comment key={comment.id} comment={comment} onReply={onReply} onEdit={onEdit} onDelete={onDelete} />
       ))}
       <AddCommentForm onSubmit={submitComment} />
     </div>
