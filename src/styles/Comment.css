@@ -1,0 +1,36 @@
+.commentBody {
+  background-color: #ffffff;
+  border: 1px solid #d3d3d3;
+  padding: 10px;
+  margin: 10px;
+}
+
+.topLevel {
+    background-color: #c4f2e7;
+}
+
+.commentBody h1 {
+  margin-bottom: 10px;
+}
+
+.commentBody p {
+  margin-bottom: 10px;
+}
+
+.commentBody button {
+  margin: 10px;
+  border-radius: 5px;
+  background-color: #51edc9;
+  color: #000000;
+  padding: 5px 10px;
+  border: none;
+  font-size: 12px;
+  border: solid black 1px;
+  font-weight: 400;
+}
+
+.commentBody button:hover {
+  cursor: pointer;
+  background-color: #2b8e82;
+  color: #ffffff;
+}

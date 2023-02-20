@@ -2,7 +2,18 @@ import React, { useState } from "react";
 import AddCommentForm from "./AddCommentForm";
 import EditCommentForm from "./EditCommentForm";
 
-function Comment({ comment, onReply, onEdit, onDelete, currentUser, showDelete }) {
+import "../styles/Comment.css";
+
+function Comment({
+  comment,
+  onReply,
+  onEdit,
+  onDelete,
+  currentUser,
+  showDelete,
+  parentId,
+  depth = 0,
+}) {
   const [editing, setEditing] = useState(false);
   const [replying, setReplying] = useState(false);
 
@@ -26,7 +37,7 @@ function Comment({ comment, onReply, onEdit, onDelete, currentUser, showDelete }
 
   return (
     <div className="commentContainer">
-      <div className="commentBody">
+      <div className={depth === 0 ? "commentBody topLevel" : "commentBody"}>
         <h1>{comment.user.name}</h1>
         <p>{comment.text}</p>
         {currentUser && (
@@ -39,7 +50,6 @@ function Comment({ comment, onReply, onEdit, onDelete, currentUser, showDelete }
                   onSubmit={handleReply}
                   onCancel={() => setReplying(false)}
                 />
-                <button onClick={() => setReplying(false)}>Cancel</button>
               </>
             )}
             {comment.user.id === currentUser.id && (
@@ -53,13 +63,15 @@ function Comment({ comment, onReply, onEdit, onDelete, currentUser, showDelete }
               />
             ) : null}
             {comment.user.id === currentUser.id || showDelete === true ? (
-              <button onClick={() => onDelete(comment.id)}>Delete</button>
+              <button onClick={() => onDelete(comment.id, parentId)}>
+                Delete
+              </button>
             ) : null}
           </>
         )}
       </div>
 
-      <div className="commentReplies">
+      <div className="commentReplies" style={{ marginLeft: depth + 32 }}>
         {" "}
         {comment.children.map((child) => (
           <Comment
@@ -70,6 +82,8 @@ function Comment({ comment, onReply, onEdit, onDelete, currentUser, showDelete }
             onDelete={onDelete}
             currentUser={currentUser}
             showDelete={comment.user.id === currentUser.id ? true : false}
+            parentId={comment.id}
+            depth={depth + 1}
           />
         ))}
       </div>

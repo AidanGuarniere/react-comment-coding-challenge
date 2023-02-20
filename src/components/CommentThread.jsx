@@ -24,6 +24,8 @@ function CommentThread({
           onEdit={onEdit}
           onDelete={onDelete}
           currentUser={currentUser}
+          parentId={null}
+          parentDepth={0}
         />
       ))}
       <AddCommentForm onSubmit={submitComment} />
