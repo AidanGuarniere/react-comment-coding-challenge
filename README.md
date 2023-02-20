@@ -4,8 +4,6 @@
 
 Build an N-level deep and branching comments thread
 
-Requirements:
-
 - Replying to a comment creates a child of that comment
 
 - Deleting a comment also deletes its descendants
